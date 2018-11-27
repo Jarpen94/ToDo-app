@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
-import TextField from 'material-ui/TextField';
+import TextField from 'material-ui/TextField'
+import { List, ListItem } from 'material-ui/List'
+import Checkbox from 'material-ui/Checkbox'
+import DeleteIcon from 'material-ui/svg-icons/action/delete'
+import IconButton from 'material-ui/IconButton';
+
 const API_URL = 'https://poniedzialek-e01cf.firebaseio.com/'
 
 class App extends Component {
@@ -14,10 +19,14 @@ class App extends Component {
     this.setState({ taskName: event.target.value })
   }
 
-  componentDidMount() {
+  loadData =() => {
     fetch(`${API_URL}/tasks.json`)
       .then(response => response.json())
       .then(data => {
+        if (!data) {
+          this.setState({ tasks: [] })
+          return
+        }
         const array = Object.entries(data);
         const tasksList = array.map(([id, values]) => {
           values.id = id;
@@ -45,12 +54,21 @@ class App extends Component {
     }
   }
 
-
   handleKeyDown = event => {
     if (event.keyCode === 13) {
       this.handleClick()
     }
   }
+
+  handleDelete = (id) => {
+    fetch(`${API_URL}/tasks/${id}.json`, {
+      method: 'DELETE'
+    })
+    .then(() => {
+      this.loadData();
+    })
+  }
+  
 
   render() {
     return (
@@ -66,19 +84,30 @@ class App extends Component {
             onClick={this.handleClick}
           />
         </div>
-        {this.state.tasks.map((task => (
-          <div key={task.id}
-          >
-            {task.taskName} </div>
-        )
-        )
-        )}
+        <List>
+          {this.state.tasks.map((task => (
+            <ListItem
+              key={task.id}
+              primaryText={task.taskName}
+              leftCheckbox={<Checkbox />}
+              rightIconButton={
+                <IconButton>
+                  <DeleteIcon onClick={() =>this.handleDelete(task.id)} />
+                </IconButton>
+              }
+            />
+          )))
+          }
+
+        </List>
 
 
 
 
-      </div>
+      </div >
     )
   }
 }
+
+
 export default App
