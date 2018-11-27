@@ -19,9 +19,12 @@ class App extends Component {
       .then(response => response.json())
       .then(data => {
         const array = Object.entries(data);
-        const tasksList = array.map(task => task[1])
-        
-        this.setState({tasks: tasksList})
+        const tasksList = array.map(([id, values]) => {
+          values.id = id;
+          return values
+        });
+
+        this.setState({ tasks: tasksList })
       })
   }
 
@@ -29,14 +32,16 @@ class App extends Component {
   handleClick = () => {
     if (this.state.taskName !== '') {
       let tasks = this.state.tasks
-      const newTask = { taskName: this.state.taskName, completed: false }
+      let newTask = { taskName: this.state.taskName, completed: false }
       fetch(`${API_URL}/tasks.json`, {
         method: 'POST',
         body: JSON.stringify(newTask)
-      }).then(() => {
-        tasks.push(newTask)
-        this.setState({ tasks, taskName: '' })
-      })
+      }).then(response => response.json())
+        .then(data => {
+          newTask.id = data.name
+          tasks.push(newTask)
+          this.setState({ tasks, taskName: '' })
+        })
     }
   }
 
@@ -53,10 +58,14 @@ class App extends Component {
             onClick={this.handleClick}
           />
         </div>
-        {this.state.tasks.map((task, index) => (
-          <div>{task.taskName} </div>
+        {this.state.tasks.map((task => (
+          <div key={task.id}
+          >
+            {task.taskName} </div>
+        )
         )
         )}
+
 
 
 
