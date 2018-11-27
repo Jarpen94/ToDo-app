@@ -6,10 +6,7 @@ import TextField from 'material-ui/TextField';
 class App extends Component {
 
   state = {
-    tasks: [
-      { taskName: 'Sprzątanie', completed: false },
-      { taskName: 'Odkurzanie', completed: false }
-    ],
+    tasks: [],
     taskName: ''
   }
 
