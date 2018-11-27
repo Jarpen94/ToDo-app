@@ -45,6 +45,13 @@ class App extends Component {
     }
   }
 
+
+  handleKeyDown = event => {
+    if (event.keyCode === 13) {
+      this.handleClick()
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -52,6 +59,7 @@ class App extends Component {
           <TextField hintText="Zadanie"
             value={this.state.taskName}
             onChange={this.handleChange}
+            onKeyDown={this.handleKeyDown}
           />
           <RaisedButton label="Dodaj"
             primary={true}
