@@ -14,25 +14,28 @@ class App extends Component {
     this.setState({ taskName: event.target.value })
   }
 
-  componentDidMount(){
+  componentDidMount() {
     fetch(`${API_URL}/tasks.json`)
-    .then(response => response.json())
-    .then(data => {
-      console.log('mam dane', data)
-    })
+      .then(response => response.json())
+      .then(data => {
+        const array = Object.entries(data);
+        const tasksList = array.map(task => task[1])
+        
+        this.setState({tasks: tasksList})
+      })
   }
 
 
   handleClick = () => {
     if (this.state.taskName !== '') {
       let tasks = this.state.tasks
-      const newTask ={taskName: this.state.taskName, completed:false}
+      const newTask = { taskName: this.state.taskName, completed: false }
       fetch(`${API_URL}/tasks.json`, {
         method: 'POST',
         body: JSON.stringify(newTask)
       }).then(() => {
         tasks.push(newTask)
-        this.setState({tasks, taskName: ''})
+        this.setState({ tasks, taskName: '' })
       })
     }
   }
