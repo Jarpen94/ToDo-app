@@ -19,10 +19,12 @@ class App extends Component {
 
 
   handleClick = () => {
+    if (this.state.taskName !== '') {
     let tasks = this.state.tasks
     tasks.push({ taskName: this.state.taskName, completed: false })
     this.setState({tasks, taskName: ''})
   }
+}
 
   render() {
     return (
