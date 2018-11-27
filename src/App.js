@@ -21,7 +21,7 @@ class App extends Component {
   handleClick = () => {
     let tasks = this.state.tasks
     tasks.push({ taskName: this.state.taskName, completed: false })
-    this.setState({tasks})
+    this.setState({tasks, taskName: ''})
   }
 
   render() {
@@ -29,6 +29,7 @@ class App extends Component {
       <div className="App">
         <div>
           <TextField hintText="Zadanie"
+          value={this.state.taskName}
             onChange={this.handleChange}
           />
           <RaisedButton label="Dodaj" primary={true}
