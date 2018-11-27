@@ -77,7 +77,7 @@ class App extends Component {
       body: JSON.stringify(task)
     })
   }
-  
+
 
   render() {
     return (
@@ -98,7 +98,10 @@ class App extends Component {
             <ListItem
               key={task.id}
               primaryText={task.taskName}
-              leftCheckbox={<Checkbox onCheck={() => this.handleCheck(task)} />}
+              leftCheckbox={
+              <Checkbox
+              defaultChecked={task.completed}
+              onCheck={() => this.handleCheck(task)} />}
               rightIconButton={
                 <IconButton>
                   <DeleteIcon onClick={() =>this.handleDelete(task.id)} />
