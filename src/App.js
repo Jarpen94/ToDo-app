@@ -20,21 +20,28 @@ class App extends Component {
 
   handleClick = () => {
     if (this.state.taskName !== '') {
-    let tasks = this.state.tasks
-    tasks.push({ taskName: this.state.taskName, completed: false })
-    this.setState({tasks, taskName: ''})
+      let tasks = this.state.tasks
+      const newTask ={taskName: this.state.taskName, completed:false}
+      fetch('https://poniedzialek-e01cf.firebaseio.com/tasks.json', {
+        method: 'POST',
+        body: JSON.stringify(newTask)
+      }).then(() => {
+        tasks.push(newTask)
+        this.setState({tasks, taskName: ''})
+      })
+    }
   }
-}
 
   render() {
     return (
       <div className="App">
         <div>
           <TextField hintText="Zadanie"
-          value={this.state.taskName}
+            value={this.state.taskName}
             onChange={this.handleChange}
           />
-          <RaisedButton label="Dodaj" primary={true}
+          <RaisedButton label="Dodaj"
+            primary={true}
             onClick={this.handleClick}
           />
         </div>
