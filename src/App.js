@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField';
-
+const API_URL = 'https://poniedzialek-e01cf.firebaseio.com/'
 
 class App extends Component {
 
@@ -14,12 +14,20 @@ class App extends Component {
     this.setState({ taskName: event.target.value })
   }
 
+  componentDidMount(){
+    fetch(`${API_URL}/tasks.json`)
+    .then(response => response.json())
+    .then(data => {
+      console.log('mam dane', data)
+    })
+  }
+
 
   handleClick = () => {
     if (this.state.taskName !== '') {
       let tasks = this.state.tasks
       const newTask ={taskName: this.state.taskName, completed:false}
-      fetch('https://poniedzialek-e01cf.firebaseio.com/tasks.json', {
+      fetch(`${API_URL}/tasks.json`, {
         method: 'POST',
         body: JSON.stringify(newTask)
       }).then(() => {
